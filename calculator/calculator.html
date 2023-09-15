@@ -1,0 +1,764 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Calculator</title>
+    <style>
+        
+
+body {
+            background: white;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #main {
+
+            height: calc(90vh+20px);
+            width: 300px;
+            /* border: 2px solid red; */
+            background: black;
+            border-radius: 20px;
+            box-shadow: 0 0 12px #cccbc8,
+                1px 1px 12px rgb(31, 30, 30);
+            /*z-index:-4;*/
+
+        }
+
+        #ans {
+            height: 150px;
+            width: 300px;
+            background: black;
+            border-radius: 20px 20px 0 0;
+            color: white;
+
+        }
+
+        #screen {
+            height: 130px;
+            width: 295px !important;
+            overflow: auto;
+
+            text-align: end;
+            font-size: 3.65rem;
+            display: flex;
+            align-items: end;
+            justify-content: end;
+            position: relative;
+            flex-wrap: wrap;
+
+
+
+
+        }
+
+        #screen:before {
+            content: "";
+            height: 60px;
+            width: 3px;
+            background: orange;
+            transform: translate(0, -8%);
+            position: absolute;
+            animation-name: example;
+            animation-duration: 1.6s;
+            animation-iteration-count: infinite;
+        }
+
+       
+        @keyframes example {
+            50% {
+                opacity: 1;
+
+            }
+
+            100% {
+                opacity: 0;
+
+            }
+
+        }
+
+
+        #mode {
+            display: flex;
+            color: black;
+            background: black;
+            height: 20px;
+            width: 300px;
+            padding-bottom: 1%;
+            padding-top: 0.5%;
+            position: relative;
+            box-shadow: 0 0.5px 0.5px rgb(116, 114, 114);
+            z-index: 2;
+
+
+        }
+
+        #span_main {
+            display: flex;
+            height: 20px;
+            width: 40px;
+            background: white;
+            margin-left: 3%;
+            border-radius: 20px;
+            position: relative;
+            align-items: center;
+            box-shadow: inset 0px 0px 4px rgb(116, 114, 114);
+
+
+
+        }
+
+        /
+        #span_under {
+            height: 20px;
+            width: 20px;
+            background: rgb(17, 17, 17);
+            border-radius: 50%;
+            position: absolute;
+            transform: scale(0.8);
+            box-shadow: inset 0 0 3px rgb(138, 136, 136);
+            transform: translate(100%, 0) scale(0.8);
+        }
+
+
+        .fa {
+            color: #03fc49;
+            font-size: 1.35rem;
+            margin-left: auto;
+            margin-right: 6%;
+        }
+
+        #btn {
+
+            background: black;
+            height: 96.8%;
+            width: 100%;
+            text-align: center;
+            display: grid;
+            align-items: center;
+            justify-content: center;
+            grid-template-columns: repeat(4, 20%);
+            position: absolute;
+            padding-top: 2%;
+            padding-bottom: 2%;
+            border-radius: 0 0 20px 20px;
+            cursor: default;
+            z-index: 0;
+
+        }
+
+        #backspace {
+            /* color:rgb(22, 22, 22) ; */
+            font-size: 20px;
+        }
+
+        .b {
+
+            /* border: 2px solid white; */
+            height: 9vh;
+            width: 9vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 50%;
+            /* font-weight: bold; */
+            font-size: 1.7rem;
+
+
+        }
+
+        .b:active {
+            transition: 0.1s;
+            background: linear-gradient(rgb(255, 136, 0), #fa5b05);
+
+            /* box-shadow:inset 0px 0px 9px rgb(129, 128, 128); */
+            color: white;
+        }
+
+        #equal {
+            background: linear-gradient(135deg, orange, #eb741e);
+            color: white;
+            font-weight: bold;
+        }
+
+        #equal:active {
+            background: linear-gradient(rgb(255, 136, 0), #fa5b05);
+        }
+
+        #multiply,
+        #add,
+        #subtract,
+        #divide {
+            /*color:#03fc88;*/
+            color: #03fc49;
+
+        }
+
+        #multiply:active,
+        #add:active,
+        #subtract:active,
+        #divide:active {
+            color: white;
+            background: linear-gradient(#03fc88, #2cab0c);
+
+        }
+
+        #clear,
+        #backspace {
+            color: orange;
+        }
+
+        #clear:active,
+        #backspace:active {
+            background: linear-gradient(120deg, #f76565, #ad0505);
+            color: white;
+        }
+
+        #container {
+            height: calc(90vh - 150px);
+            width: 300px;
+            position: relative;
+
+        }
+
+        #scientific {
+            cursor: default;
+            /* border:1px solid pink; */
+            display: grid;
+            align-items: center;
+            justify-content: center;
+            grid-template-columns: repeat(3, 25%);
+            row-gap: 2%;
+            column-gap: 5%;
+            text-align: center;
+            background: black;
+            font-size: 1.4rem;
+            font-weight: bold;
+            z-index: 9;
+            padding-top: 2%;
+            padding-bottom: 4%;
+            border-radius: 0 0 20px 20px;
+            /* height: 0; */
+            overflow: hidden;
+
+        }
+
+        .z {
+            height: 11vh;
+            width: 11vh;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .z:active {
+            transition: 0.1s;
+            background: linear-gradient(rgb(255, 136, 0), #fa5b05);
+            color: white;
+
+        }
+    </style>
+</head>
+
+<body id="body">
+
+    <div id="main" style="background:black;">
+        <div id=ans>
+            <div id="screen">
+
+            </div>
+
+        </div>
+        <div id="mode">
+            <span id="span_main">
+                <span id="span_under"></span>
+            </span>
+            <span class="fa fa-flask"></span>
+        </div>
+
+        <div id=container>
+
+
+            <div id="btn">
+                <div id="clear" class="b">C</div>
+                <div id="right_bracket" class="b">(</div>
+                <div id="left_bracket" class="b">)</div>
+                <div id=backspace class="material-icons b">&#xe14a; </div>
+                <div id="seven" class="b">7</div>
+                <div id="eight" class="b">8</div>
+                <div id="nine" class="b">9</div>
+                <div id="multiply" class="b">&#215;</div>
+                <div id="four" class="b">4</div>
+                <div id="five" class="b">5</div>
+                <div id="six" class="b">6</div>
+                <div id="divide" class="b">&#247;</div>
+                <div id="one" class="b">1</div>
+                <div id="two" class="b">2</div>
+                <div id=three class="b">3</div>
+                <div id="subtract" class="b">&#8722;</div>
+                <div id="decimal" class="b">.</div>
+                <div id="zero" class="b">0</div>
+                <div id="add" class="b">+</div>
+                <div id="equal" class="b">=</div>
+            </div>
+
+            <div id=scientific style="height:0;">
+                <div id="factorial" class="z">n!</div>
+                <div id="sin" class="z">sin</div>
+                <div id="cos" class="z">cos</div>
+                <div id="tan" class="z">tan</div>
+                <div id="log" class="z">log</div>
+                <div id="ln" class="z">ln</div>
+                <div id="e" class="z">e</div>
+                <div id="root" class="z">√</div>
+                <div id="pow" class="z">^</div>
+                <div id="arcsin" class="z">arcsin</div>
+                <div id="arccos" class="z">arccos</div>
+                <div id="arctan" class="z">arctan</div>
+                <div id="round" class="z">[n]</div>
+                <div id="pi" class="z">&pi;</div>
+                <div id="scientific_equal" class="z">e^n</div>
+
+            </div>
+
+        </div>
+    </div>
+
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js
+">
+</script>
+    <script>
+    
+    
+    Swal.fire({
+  title: 'Calculate your sum',
+  showClass: {
+    popup: 'animate_animated animate_fadeInDown'
+  },
+  hideClass: {
+    popup: 'animate_animated animate_fadeOutUp'
+  }
+})
+    
+    
+    
+        let mode = document.getElementById("span_main")
+        let circle = document.getElementById("span_under")
+        let body = document.getElementById("body")
+        let btn = document.getElementById("btn")
+        let screen = document.getElementById("screen")
+        let ans = document.getElementById("ans")
+        let m = document.getElementById("mode")
+        let b = document.getElementsByClassName("b")
+        let backspace = document.getElementById("backspace")
+        let flask = document.getElementsByClassName("fa")
+        let scientific = document.getElementById("scientific")
+        let z = document.getElementsByClassName("z")
+
+        let main = document.getElementById("main")
+        let container = document.getElementById("container")
+
+        let g = true
+        let h = true
+        let tap=true
+
+        flask[0].addEventListener("click", () => {
+
+            if (h == true) {
+                if (main.style.getPropertyValue("background") == "black") {
+                    scientific.style.cssText = "background:black; height:calc(86.5vh - 150px); color:white; transition:height 0.6s linear;"
+                    btn.style.cssText = "z-index:-1;"
+                }
+                else if (main.style.getPropertyValue("background") == "white") {
+                    scientific.style.cssText = "height:calc(86.5vh - 150px); background:white; color:black; transition:height 0.6s;";
+                    btn.style.cssText = "z-index:-1; background:white; color:black;"
+                }
+
+                h = false
+            }
+            else if (h == false) {
+                //   scientific.style.cssText="height:0;" ;
+                if (main.style.getPropertyValue("background") == "black") {
+
+                    btn.style.cssText = "color:white; background:black; z-index:0; transition:z-index 1.4s;"
+                    scientific.style.cssText = "background:black; height:0; transition:height 0.7s;";
+                }
+                else if (main.style.getPropertyValue("background") == "white") {
+
+                    btn.style.cssText = "background:white; color:black; z-index:0; transition:z-index 1.4s;"
+                    scientific.style.cssText = "background:white; height:0; transition:height 0.7s;";
+                }
+
+                h = true
+            }
+        })
+
+
+
+
+        mode.addEventListener("click", () => {
+            if (g == true) {
+                mode.style.cssText = "background:rgb(17, 17, 17); transition:1.5s;"
+                circle.style.cssText = "background:white;transform:translate(0%,0%) scale(0.8); transition:1.5s;"
+                body.style.cssText = "color:black; transition:color 1.5s;"
+                btn.style.cssText = "background:white; transition:1.5s; color:black;"
+                scientific.style.cssText = "background:white; transition:1.5s; height:0;"
+                main.style.cssText = "background:white; transition:1.5s; color:black;"
+
+                ans.style.cssText = "background:white; color:black; transition:1.5s;"
+                m.style.cssText = "background:white; transition:1.5s;"
+                g = false
+            }
+            else if (g == false) {
+                mode.style.cssText = "background:white; transition:1.5s;"
+                circle.style.cssText = "background:rgb(17, 17, 17);transform:translate(100%,0%) scale(0.8); transition:1.5s;"
+                main.style.cssText = "background:black; transition:1.5s; color:white;"
+                btn.style.cssText = "background:black; transition:1.5s; color:white;"
+                ans.style.cssText = "background:black; transition:1.5s;"
+                m.style.cssText = "background:black; transition:1.5s;"
+
+                g = true
+            }
+
+
+
+
+
+        });
+        let string = ""
+        let replaced = ""
+        let y = ""
+        let x=''
+        let f=""
+
+
+        Array.from(z).forEach((r) => {
+            r.addEventListener("click", () => {
+                tap=false
+
+                 f = r.innerText
+                
+                // try{
+                if (f == "n!") {
+                    f=''
+                    tap=true
+                    
+                    
+                    
+                    if(fac(eval(string)).toString(10).length>8){
+                        screen.innerHTML = fac(eval(string))
+                   
+                    // string=fac(eval(string)).toString(10)
+                    
+                    screen.style.cssText = "font-size:1.5rem; transition:1s;"
+                    // replaced=fac(eval(string)).toString(10)
+               
+            
+            }
+            else{
+                screen.innerHTML = fac(eval(string))
+                    replaced=fac(eval(string)).toString(10)
+                    string=fac(eval(string)).toString(10)
+            }
+                }
+
+                else if (f == "[n]") {
+                    f=''
+                    tap=true
+                    screen.innerHTML = greatest_integer(eval(string))
+                    replaced=greatest_integer(eval(string)).toString(10)
+                    string=greatest_integer(eval(string)).toString(10)
+                    
+                }
+                else if (f == "e^n") {
+                    f=''
+                    tap=true
+                    screen.innerHTML = e_power(eval(string))
+                    replaced= e_power(eval(string)).toString(10)
+                    string= e_power(eval(string)).toString(10)
+                    
+                }
+          
+
+                 else if (f == "√") {
+                   screen.innerHTML=f+replaced
+            
+
+                }
+                else if(f=="^"){
+                    screen.innerHTML=x+"^"+y
+                }
+
+                else {
+                    screen.innerHTML = f+replaced
+
+                    
+                }
+
+            })
+
+        })
+
+
+        Array.from(b).forEach((e) => {
+            e.addEventListener("click", () => {
+
+
+
+                if (e.innerHTML == "=") {
+                    try {
+                        if(tap==true){
+
+                        if (Number.isInteger(eval(string))) {
+                            string = eval(string)
+                            string = string.toString(10)
+                            replaced = string
+                            screen.innerHTML = string
+                        }
+                        else if (Number.isInteger(eval(string)) == false && eval(string).toString(10).length < 12) {
+                            string = eval(string)
+
+                            string = string.toString(10)
+                            replaced = string
+                            screen.innerHTML = string
+                        }
+                        else {
+
+                            string = eval(string).toFixed(6)
+
+                            replaced = string
+                            screen.innerHTML = string
+                        }
+                    }
+
+
+                    else{
+                        
+                        if (f == "√") {
+                   screen.innerHTML=square_root(eval(string)).toFixed(4)
+            replaced=square_root(eval(string)).toFixed(4)
+            string=square_root(eval(string)).toFixed(4)
+            f=''
+
+                }
+                else if(f=="^"){
+                    
+                    screen.innerHTML=xpowery(x,y)
+                    replaced=xpowery(x,y)
+                    string=xpowery(x,y)
+                    f=''
+                    x=''
+                    y=''
+
+                }
+                else{
+                    
+                        screen.innerHTML=window[f](eval(string)).toFixed(7)
+                        replaced=window[f](eval(string)).toFixed(7)
+                        string=window[f](eval(string)).toFixed(7)
+                        f=""
+                       
+                }
+                tap=true
+                    }
+                    }
+                    catch (error) {
+                        screen.innerHTML = "Error"
+
+                    }
+                }
+                else if (e.innerHTML == "C") {
+                    string = ""
+                    replaced = ""
+                    f=""
+                    screen.innerHTML = string
+                }
+                else if (e.innerHTML == "×") {
+                    if (string == "") {
+                        screen.innerHTML = f+""
+                    }
+                    else if (string.slice(string.length - 1, string.length) == "-" || string.slice(string.length - 1, string.length) == "+" || string.slice(string.length - 1, string.length) == "/" || string.slice(string.length - 1, string.length) == "*") {
+                        replaced = replaced.slice(0, -1)
+
+                        string = replaced + "*"
+                        replaced += "×"
+                        screen.innerHTML = replaced
+                    }
+
+                    else {
+                        replaced += "×"
+                        string += "*"
+                        screen.innerHTML = f+replaced
+
+                    }
+                }
+
+                else if (e.innerHTML == "÷") {
+                    if (string == "") {
+                        screen.innerHTML = f+""
+                    }
+
+                    else if (string.slice(string.length - 1, string.length) == "-" || string.slice(string.length - 1, string.length) == "+" || string.slice(string.length - 1, string.length) == "*" || string.slice(string.length - 1, string.length) == "/") {
+                        replaced = replaced.slice(0, -1)
+                        string = replaced + "/"
+                        replaced += "÷"
+                        screen.innerHTML = f+replaced
+                    }
+
+                    else {
+                        replaced += "÷"
+                        string += "/"
+                        screen.innerHTML = f+replaced
+                    }
+                }
+
+                else if (e == backspace) {
+                    if(replaced==""){
+                        f=""
+                        screen.innerHTML=""
+                    }
+                    else{
+
+                    replaced = replaced.slice(0, -1)
+
+                    string = replaced
+                    screen.innerHTML = f+replaced
+                    }
+
+
+                }
+                else if (e.innerHTML == "+") {
+                    if (string.slice(string.length - 1, string.length) == "-" || string.slice(string.length - 1, string.length) == "*" || string.slice(string.length - 1, string.length) == "/") {
+                        replaced = replaced.slice(0, -1)
+                        replaced += "+"
+                        string = replaced
+                        screen.innerHTML = f+replaced
+                    }
+                    else if (string == "") {
+                        screen.innerHTML = f+""
+                    }
+                    else {
+                        replaced = replaced + e.innerHTML
+                        string = string + e.innerHTML
+                        screen.innerHTML = f+replaced
+                    }
+                }
+                else if (e.innerHTML == "−") {
+                    if (string.slice(string.length - 1, string.length) == "+") {
+                        replaced = replaced.slice(0, -1)
+                        replaced += "−"
+                        string += "-"
+                        screen.innerHTML = f+replaced
+                    }
+                    else {
+                        replaced += "−"
+                        string += "-"
+                        screen.innerHTML = f+replaced
+                    }
+                }
+
+                else {
+                    
+
+
+                    replaced = replaced + e.innerHTML
+                    string = string + e.innerHTML
+                    screen.innerHTML = f+replaced
+                    screen.style.cssText = "font-size:3.65rem; transition:0.5s;"
+
+                    if(tap==true){
+                        x=eval(string)
+                    }
+                    else if(tap==false){
+                         y+=e.innerHTML
+                    }
+
+                   
+                }
+            })
+        })
+
+        function sin(x) {
+
+            return Math.sin(x)
+        }
+        function cos(x) {
+
+            return Math.cos(x)
+        }
+        function tan(x) {
+
+            return Math.tan(x)
+        }
+        function ln(x) {
+
+            return Math.log(x)
+        }
+        function log(x) {
+
+            return Math.log10(x)
+        }
+        function arcsin(x) {
+
+            return Math.asin(x)
+        }
+        function arccos(x) {
+
+            return Math.acos(x)
+        }
+        function arctan(x) {
+
+            return Math.atan(x)
+        }
+        function e(x) {
+
+            return Math.E
+        }
+        function π(x) {
+
+            return Math.PI
+        }
+        function fac(x) {
+            if (x < 0) return "error";
+            if (x == 1 || x == 0) return 1;
+            return x * fac(x - 1);
+        }
+
+        function greatest_integer(x) {
+            return Math.floor(x)
+        }
+
+        function e_power(x){
+            return Math.pow(Math.E,x).toFixed(4)
+        }
+
+        function square_root(x) {
+            return Math.sqrt(x)
+        }
+
+        function xpowery(x,y){
+            return Math.pow(x,y).toFixed(4)
+        }
+
+
+
+    </script>
+</body>
+
+</html>
+
